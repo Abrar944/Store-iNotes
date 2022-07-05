@@ -13,7 +13,7 @@ function App() {
       <h1>iNotesbooks</h1>
       <BrowserRouter>
     <Routes>
-      <Route  path="Navbar" element={<Navbar />}></Route>
+      <Route  path="/" element={<Navbar />}></Route>
       <Route  path="HomePage" element={<Home />}></Route>
       <Route  path="AboutPage" element={<About />}></Route>
     </Routes>
