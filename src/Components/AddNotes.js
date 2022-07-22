@@ -11,6 +11,7 @@ export const AddNotes = () => {
   const addclick = (e) => {
     e.preventDefault();
     addnotes(note.title, note.description, note.tag);
+    setnote({ title: " ", description: " ", tag: " " })
   };
   //Function For Making the Changes
   const handlechange = (e) => {
@@ -30,7 +31,9 @@ export const AddNotes = () => {
             className="form-control"
             id="title"
             name="title"
+            value = {note.title}
             aria-describedby="emailHelp"
+            required
             onChange={handlechange}
           />
           <div id="emailHelp" className="form-text"></div>
@@ -44,7 +47,9 @@ export const AddNotes = () => {
             className="form-control"
             id="description "
             name="description"
+            value = {note.description}
             onChange={handlechange}
+            required
           />
         </div>
         <div className="mb-3">
@@ -56,10 +61,12 @@ export const AddNotes = () => {
             className="form-control"
             id="tag "
             name="tag"
+            value = {note.tag}
             onChange={handlechange}
+            required
           />
         </div>
-        <button type="submit" className="btn btn-primary" onClick={addclick}>
+        <button disabled={note.title.length<5 || note.description.length<5 } type="submit" className="btn btn-primary" onClick={addclick}>
           AddNotes
         </button>
       </form>
