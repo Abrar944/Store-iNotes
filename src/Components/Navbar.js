@@ -45,17 +45,9 @@ function Navbar() {
               </Link>
             </li>
           </ul>
-          <form className="d-flex" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button className="btn btn-outline-warning" type="submit">
-              Search
-            </button>
-          </form>
+          <Link className="btn btn-primary mx-2 "  to="/LoginPage" role="button" aria-disabled="true">Login</Link>
+          <Link className="btn btn-primary mx-2 "  to="/SignUpPage"role="button" aria-disabled="true">SignUp</Link>
+            
         </div>
       </div>
     </nav>
