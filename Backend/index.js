@@ -3,6 +3,7 @@ const express = require("express");
 connectomongo();
 const app = express();
 var cors = require("cors");
+require('dotenv').config();
 
 const port = 5000;
 app.use(cors());
