@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+// import { unstable_HistoryRouter } from "react-router-dom";
 import Navbar from "./Navbar";
 
 export const Login = () => {
+          const history = useNavigate()
   const [credentials, setCredentials] = useState({ email: " ", password: " " });
   const handlesubmit = async (e) => {
     e.preventDefault();
@@ -17,6 +20,13 @@ export const Login = () => {
     });
     const json = await response.json();
     console.log(json);
+    if (json.success) {
+      history("../", { replace: true })
+      
+    }
+    else{
+      alert("Invalid Credentials")
+    }
   };
   const handlechange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });

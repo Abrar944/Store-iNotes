@@ -4,10 +4,10 @@ const User = require("../models/Users");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const fetchuser = require('../middleware/Fetch')
+const fetchuser = require("../middleware/Fetch");
 const JWT = "Abrar Is a GoodBoy";
 
-//EndPoint for login CreateUser
+//EndPoint for NewCreateUser
 router.post(
   "/createuser",
   [
@@ -43,7 +43,6 @@ router.post(
         },
       };
       const authtoken = jwt.sign(data, JWT);
-
       res.json(authtoken);
     } catch (error) {
       console.error(error.message);
@@ -53,30 +52,34 @@ router.post(
 );
 // EndPoint for LoginUser
 
-router.post("/login",
+router.post(
+  "/login",
   [
     body("email", "Enter the valid mail").isEmail(),
     body("password", "It cannot be blank field ").exists(),
   ],
   async (req, res) => {
+    let success = false;
     //if there are errors, return bad request and the errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success, errors: errors.array() });
     }
     const { email, password } = req.body;
     try {
       var user = await User.findOne({ email });
       if (!user) {
-        return res
+        success = false;
+           return res
           .status(400)
           .json({ error: "Login With Correct Credentials" });
       }
       let passwordcompare = await bcrypt.compare(password, user.password);
       if (!passwordcompare) {
+        success = false;
         return res
           .status(400)
-          .json({ error: "Login With Correct Credentials" });
+          .json({ success, error: "Login With Correct Credentials" });
       }
       const data = {
         user: {
@@ -84,25 +87,25 @@ router.post("/login",
         },
       };
       const authtoken = jwt.sign(data, JWT);
-
-      res.json({"authToken":   authtoken});
+      success = true;
+      res.json({ success, authtoken });
     } catch (error) {
       res.status(500).send("send Error Occured");
-    }});
+    
+    }
+  }
+);
 
-    // Routes:3 Get the Users Who Already login they need to auth using the jsw token
+// Routes:3 Get the Users Who Already login they need to auth using the jsw token
 
-     router.post("/getuser", fetchuser, async (req, res)=>{
-
-      try {
-        var userId= req.user.id;
-        const user = await User.findById(userId).select("-password")
-        res.send(user)
-      } catch (error) { 
-        res.status(500).send("send Error Occured Hello  ");
-
-      }
-
-    });
+router.post("/getuser", fetchuser, async (req, res) => {
+  try {
+    var userId = req.user.id;
+    const user = await User.findById(userId).select("-password");
+    res.send(user);
+  } catch (error) {
+    res.status(500).send("send Error Occured Hello  ");
+  }
+});
 
 module.exports = router;
